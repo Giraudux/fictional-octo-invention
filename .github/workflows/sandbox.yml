@@ -57,7 +57,7 @@ jobs:
             username: ubuntu
         EOF
         touch www/meta-data
-        (cd www/ && python3 -m http.server 3003)
+        (cd www/ && python3 -m http.server 3003) &
 
         truncate -s 10G drive.img
 
