@@ -33,7 +33,7 @@ jobs:
         set -x
 
         sudo apt update
-        sudo apt install -y tree
+        sudo apt install -y tree qemu-system-x86
 
         readonly device=/dev/$(lsblk --noheadings --output PKNAME "$(findmnt --noheadings --output SOURCE /mnt/)")
         sudo umount /mnt/
