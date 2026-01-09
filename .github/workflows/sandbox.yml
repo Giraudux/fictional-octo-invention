@@ -21,6 +21,7 @@ jobs:
         rm_cmd: "rmz"
         rmz_version: "3.1.1"
 #        testing: false
+    - uses: actions/checkout@v6
     - id: cache-ubuntu-installer
       uses: actions/cache@v4
       with:
@@ -28,7 +29,6 @@ jobs:
         key: ubuntu-24.04.3-desktop-amd64
     - if: steps.cache-ubuntu-installer.outputs.cache-hit != 'true'
       run: wget --quiet https://releases.ubuntu.com/24.04.3/ubuntu-24.04.3-desktop-amd64.iso
-    - uses: actions/checkout@v6
     - run: |
         set -x
 
@@ -42,11 +42,8 @@ jobs:
 
         readonly device=/dev/$(lsblk --noheadings --output PKNAME "$(findmnt --noheadings --output SOURCE /mnt/)")
         sudo umount /mnt/
-        sudo rm -r /mnt/
 
-        sudo modprobe loop
-        sudo mkdir /mnt/
-        sudo mount -o loop -r "${{ github.workspace }}/ubuntu-24.04.3-desktop-amd64.iso" /mnt/
+        sudo mount -r "${{ github.workspace }}/ubuntu-24.04.3-desktop-amd64.iso" /mnt/
         cp -r /mnt/capser/ .
         sudo umount /mnt/
 
