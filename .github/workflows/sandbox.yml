@@ -1,0 +1,17 @@
+name: sandbox
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - id: cache-ubuntu-installer
+      uses: actions/cache@v4
+      with:
+        path: ubuntu-24.04.3-desktop-amd64.iso
+        key: ubuntu-24.04.3-desktop-amd64
+    - if: steps.cache-ubuntu-installer.outputs.cache-hit != 'true'
+      run: wget --quiet https://releases.ubuntu.com/24.04.3/ubuntu-24.04.3-desktop-amd64.iso
+    
