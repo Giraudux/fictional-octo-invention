@@ -35,6 +35,7 @@ jobs:
         readonly device=/dev/$(lsblk --noheadings --output PKNAME "$(findmnt --noheadings --output SOURCE /mnt/)")
         sudo umount /mnt/
 
+        sudo modprobe loop
         sudo mount -o loop -r ${{ github.workspace }}/ubuntu-24.04.3-desktop-amd64.iso /mnt/
         cp -r /mnt/capser/ .
         sudo umount /mnt/
