@@ -61,7 +61,7 @@ jobs:
 
         truncate -s 10G drive.img
 
-        kvm -no-reboot -m 2048 \
+        sudo -u "$USER" -g kvm -- kvm -no-reboot -m 2048 \
             -drive file=drive.img,format=raw,cache=none,if=virtio \
             -drive file=ubuntu-24.04.3-desktop-amd64.img,format=raw,cache=none,if=virtio \
             -kernel casper/vmlinuz \
