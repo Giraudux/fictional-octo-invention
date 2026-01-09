@@ -35,16 +35,11 @@ jobs:
         sudo apt update
         sudo apt install -y tree
 
-        pwd
-        tree
-
-        sha256sum "${{ github.workspace }}/ubuntu-24.04.3-desktop-amd64.iso"
-
         readonly device=/dev/$(lsblk --noheadings --output PKNAME "$(findmnt --noheadings --output SOURCE /mnt/)")
         sudo umount /mnt/
 
         sudo mount -r "${{ github.workspace }}/ubuntu-24.04.3-desktop-amd64.iso" /mnt/
-        cp -r /mnt/capser/ .
+        cp -r /mnt/casper/ .
         sudo umount /mnt/
 
         mv ubuntu-24.04.3-desktop-amd64.iso ubuntu-24.04.3-desktop-amd64.img
