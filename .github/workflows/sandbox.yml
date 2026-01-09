@@ -7,6 +7,20 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+    - name: "Free disk space"
+      uses: endersonmenezes/free-disk-space@v3
+      with:
+        remove_android: true
+        remove_dotnet: true
+        remove_haskell: true
+#        remove_tool_cache: true
+        remove_swap: true
+#        remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+#        remove_packages_one_command: true
+#        remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle"
+        rm_cmd: "rmz"
+        rmz_version: "3.1.1"
+#        testing: false
     - id: cache-ubuntu-installer
       uses: actions/cache@v4
       with:
@@ -14,4 +28,39 @@ jobs:
         key: ubuntu-24.04.3-desktop-amd64
     - if: steps.cache-ubuntu-installer.outputs.cache-hit != 'true'
       run: wget --quiet https://releases.ubuntu.com/24.04.3/ubuntu-24.04.3-desktop-amd64.iso
-    
+    - uses: actions/checkout@v6
+    - run: |
+        set -x
+
+        readonly device=/dev/$(lsblk --noheadings --output PKNAME "$(findmnt --noheadings --output SOURCE /mnt/)")
+        sudo umount /mnt/
+
+        sudo mount -r ubuntu-24.04.3-desktop-amd64.iso /mnt/
+        cp -r /mnt/capser/ .
+        sudo umount /mnt/
+
+        mv ubuntu-24.04.3-desktop-amd64.iso ubuntu-24.04.3-desktop-amd64.img
+        truncate -s 10G ubuntu-24.04.3-desktop-amd64.img
+
+
+        mkdir www/
+        cat > www/user-data << 'EOF'
+        #cloud-config
+        autoinstall:
+        version: 1
+        identity:
+            hostname: ubuntu-server
+            password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+            username: ubuntu
+        EOF
+        touch www/meta-data
+        (cd www/ && python3 -m http.server 3003)
+
+        truncate -s 10G drive.img
+
+        kvm -no-reboot -m 2048 \
+            -drive file=drive.img,format=raw,cache=none,if=virtio \
+            -drive file=ubuntu-24.04.3-desktop-amd64.img,format=raw,cache=none,if=virtio \
+            -kernel casper/vmlinuz \
+            -initrd casper/initrd \
+            -append "autoinstall ds=nocloud-net;s=http://_gateway:3003/"
