@@ -43,5 +43,6 @@ jobs:
           --tpm=no \
           --force \
           --debug \
-          --secure-boot=no \
+          --format=disk \
+          --bootable=yes \
           vm
