@@ -39,7 +39,6 @@ jobs:
           --repositories=universe \
           --autologin=yes \
           --format=disk \
-          --console=read-only \
           --ephemeral=yes \
           --runtime-size=8G \
           --tpm=no \
