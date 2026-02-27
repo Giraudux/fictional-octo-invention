@@ -9,8 +9,11 @@ jobs:
     steps:
     - name: setup-mkosi
       uses: systemd/mkosi@v26
-    - run: mkosi --version
     - run: |
+        sudo apt -y update
+        sudo apt -y install python3-pefile
+    - run: |
+        set -x
         mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
         Types: deb
