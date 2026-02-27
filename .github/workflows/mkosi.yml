@@ -10,4 +10,35 @@ jobs:
     - name: setup-mkosi
       uses: systemd/mkosi@v26
     - run: mkosi --version
-    
+    - run: |
+        mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
+        cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
+        Types: deb
+        URIs: http://archive.ubuntu.com/ubuntu/
+        Suites: noble noble-updates noble-backports
+        Components: main restricted universe multiverse
+        Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+        Types: deb
+        URIs: http://security.ubuntu.com/ubuntu/
+        Suites: noble-security
+        Components: main restricted universe multiverse
+        Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+        EOF
+        cat << EOF > mkosi.extra/root/.profile
+        apt -y update
+        EOF
+        mkosi \
+          --distribution=ubuntu \
+          --release=noble \
+          --architecture=x86-64 \
+          --package=systemd-boot,systemd-resolved,systemd-repart,ubuntu-minimal,linux-image-generic \
+          --repositories=universe \
+          --autologin=yes \
+          --format=disk \
+          --console=read-only \
+          --ephemeral=yes
+          --runtime-size=8G
+          --tpm=no
+          --force \
+          vm
