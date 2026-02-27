@@ -30,6 +30,7 @@ jobs:
         EOF
         cat << EOF > mkosi.extra/root/.profile
         apt -y update
+        poweroff
         EOF
         mkosi \
           --distribution=ubuntu \
