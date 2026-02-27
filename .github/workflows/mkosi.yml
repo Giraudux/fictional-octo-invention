@@ -11,7 +11,7 @@ jobs:
       uses: systemd/mkosi@v26
     - run: |
         sudo apt -y update
-        sudo apt -y install python3-pefile
+        sudo apt -y install python3-pefile qemu-system
     - run: |
         set -x
         mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
