@@ -43,5 +43,4 @@ jobs:
           --tpm=no \
           --force \
           --debug \
-          --console=read-only \
           vm
