@@ -33,6 +33,10 @@ jobs:
         apt -y update
         poweroff
         EOF
+        cat << EOF > mkosi.conf
+        [Runtime]
+        QemuArgs=-D qemu.log
+        EOF
         mkosi \
           --distribution=ubuntu \
           --release=noble \
@@ -43,7 +47,7 @@ jobs:
           --tpm=no \
           --force \
           --debug \
-          vm -- -D vm.log
+          vm
     - if: always()
       continue-on-error: true
-      run: cat vm.log
+      run: cat qemu.log
