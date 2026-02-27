@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: setup-mkosi
-      uses: systemd/mkosi@v26
+      uses: systemd/mkosi@main
     - run: |
         sudo apt -y update
         sudo apt -y install python3-pefile qemu-system
@@ -33,10 +33,6 @@ jobs:
         apt -y update
         poweroff
         EOF
-        cat << EOF > mkosi.conf
-        [Runtime]
-        QemuArgs=-D qemu.log
-        EOF
         mkosi \
           --distribution=ubuntu \
           --release=noble \
@@ -47,7 +43,5 @@ jobs:
           --tpm=no \
           --force \
           --debug \
+          --console=headless
           vm
-    - if: always()
-      continue-on-error: true
-      run: cat qemu.log
