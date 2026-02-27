@@ -40,8 +40,8 @@ jobs:
           --autologin=yes \
           --format=disk \
           --console=read-only \
-          --ephemeral=yes
-          --runtime-size=8G
-          --tpm=no
+          --ephemeral=yes \
+          --runtime-size=8G \
+          --tpm=no \
           --force \
           vm
