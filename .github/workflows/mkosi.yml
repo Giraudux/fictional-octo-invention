@@ -1,0 +1,13 @@
+name: mkosi
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mkosi:
+    runs-on: ubuntu-latest
+    steps:
+    - name: setup-mkosi
+      uses: systemd/mkosi@v26
+    - run: mkosi --version
+    
