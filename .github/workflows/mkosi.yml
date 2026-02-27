@@ -43,4 +43,5 @@ jobs:
           --tpm=no \
           --force \
           --debug \
+          --secure-boot=no \
           vm
