@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: setup-mkosi
-      uses: systemd/mkosi@main
+      uses: systemd/mkosi@26
     - run: |
         sudo apt -y update
         sudo apt -y install python3-pefile qemu-system
@@ -40,5 +40,4 @@ jobs:
           --ephemeral=yes \
           --tpm=no \
           --force \
-          --format=disk \
           vm
