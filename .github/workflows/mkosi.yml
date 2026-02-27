@@ -43,6 +43,6 @@ jobs:
           --ephemeral=yes \
           --runtime-size=8G \
           --tpm=no \
-          --console=native \
+          --console=headless \
           --force \
           vm
