@@ -34,14 +34,10 @@ jobs:
         mkosi \
           --distribution=ubuntu \
           --release=noble \
-          --architecture=x86-64 \
-          --package=systemd-boot,systemd-resolved,systemd-repart,ubuntu-minimal,linux-image-generic \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
           --repositories=universe \
           --autologin=yes \
-          --format=disk \
           --ephemeral=yes \
-          --runtime-size=8G \
           --tpm=no \
-          --console=headless \
           --force \
-          boot
+          vm
