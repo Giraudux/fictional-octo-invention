@@ -40,4 +40,5 @@ jobs:
           --ephemeral=yes \
           --tpm=no \
           --force \
+          --format=disk \
           vm
