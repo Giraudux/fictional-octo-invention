@@ -12,7 +12,8 @@ jobs:
     - run: |
         sudo apt -y update
         sudo apt -y install python3-pefile qemu-system
-    - run: |
+    - timeout-minutes: 10
+      run: |
         set -x
         mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
@@ -28,6 +29,7 @@ jobs:
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         EOF
         cat << EOF > mkosi.extra/root/.profile
+        set -x
         apt -y update
         poweroff
         EOF
@@ -41,4 +43,7 @@ jobs:
           --tpm=no \
           --force \
           --debug \
-          vm
+          vm -- -D vm.log
+    - if: always()
+      continue-on-error: true
+      run: cat vm.log
