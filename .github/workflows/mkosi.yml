@@ -33,7 +33,7 @@ jobs:
         poweroff
         EOF
     - timeout-minutes: 10
-      shell: 'script --return --quiet --command "bash {0}"'
+      shell: script --return --quiet --command "bash {0}"
       run: |
         mkosi \
           --distribution=ubuntu \
