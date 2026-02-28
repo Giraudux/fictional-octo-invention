@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: setup-mkosi
-      uses: systemd/mkosi@main
+      uses: systemd/mkosi@v26
     - run: |
         sudo apt -y update
         mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install        
@@ -42,7 +42,4 @@ jobs:
           --ephemeral=yes \
           --tpm=no \
           --force \
-          --debug \
-          --format=disk \
-          --bootable=yes \
           vm
