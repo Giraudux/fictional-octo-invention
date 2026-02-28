@@ -22,15 +22,14 @@ jobs:
         cat > user-data << 'EOF'
         #cloud-config
         autoinstall:
-        version: 1
-        identity:
-            hostname: ubuntu-server
-            password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
-            username: ubuntu
+          version: 1
+          shutdown: poweroff
+          error-commands:
+            - poweroff
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/
     - timeout-minutes: 10
-      shell: 'script --return --quiet --command "bash {0}"'
+      shell: script --return --quiet --command "bash {0}"
       run: |
         sudo virt-install \
             --noreboot \
