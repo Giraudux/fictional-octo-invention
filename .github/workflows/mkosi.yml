@@ -8,12 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: setup-mkosi
-      uses: systemd/mkosi@main
+      uses: systemd/mkosi@v26
     - run: |
         sudo apt -y update
         mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install        
-    - timeout-minutes: 10
-      run: |
+    - run: |
         set -x
         mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
@@ -33,6 +32,9 @@ jobs:
         apt -y -o DPkg::Lock::Timeout=-1 update
         poweroff
         EOF
+    - timeout-minutes: 10
+      shell: 'script --return --quiet --command "bash {0}"'
+      run: |
         mkosi \
           --distribution=ubuntu \
           --release=noble \
