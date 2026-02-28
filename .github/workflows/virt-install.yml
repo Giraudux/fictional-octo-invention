@@ -16,7 +16,6 @@ jobs:
     - if: steps.cache.outputs.cache-hit != 'true'
       run: wget --quiet https://releases.ubuntu.com/24.04.4/ubuntu-24.04.4-desktop-amd64.iso
     - timeout-minutes: 10
-      continue-on-error: true
       run: |
         set -x
         sudo apt -y update
@@ -30,13 +29,14 @@ jobs:
             password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
             username: ubuntu
         EOF
+        mv ubuntu-24.04.4-desktop-amd64.iso "${{ runner.temp }}"
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
             --disk size=1000 \
             --osinfo ubuntunoble \
-            --cdrom ubuntu-24.04.4-desktop-amd64.iso \
+            --cdrom "${{ runner.temp }}/ubuntu-24.04.4-desktop-amd64.iso" \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
+            --location "${{ runner.temp }}/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd" \
             --cloud-init user-data=user-data \
             --graphics none
