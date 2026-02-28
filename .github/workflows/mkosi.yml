@@ -11,7 +11,7 @@ jobs:
       uses: systemd/mkosi@main
     - run: |
         sudo apt -y update
-        sudo apt -y install python3-pefile qemu-system systemd-boot
+        mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install        
     - timeout-minutes: 10
       run: |
         set -x
