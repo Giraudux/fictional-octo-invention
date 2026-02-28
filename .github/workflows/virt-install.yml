@@ -32,6 +32,7 @@ jobs:
         EOF
         sudo virt-install \
             --noreboot \
+            --check disk_size=off \
             --disk size=1000 \
             --osinfo ubuntunoble \
             --cdrom ubuntu-24.04.4-desktop-amd64.iso \
