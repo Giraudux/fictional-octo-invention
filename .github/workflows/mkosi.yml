@@ -42,4 +42,5 @@ jobs:
           --ephemeral=yes \
           --tpm=no \
           --force \
+          --console=read-only \
           vm
