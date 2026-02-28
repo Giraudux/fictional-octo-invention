@@ -30,7 +30,7 @@ jobs:
         EOF
         cat << EOF > mkosi.extra/root/.profile
         set -x
-        apt -y update
+        apt -y -o DPkg::Lock::Timeout=-1 update
         poweroff
         EOF
         mkosi \
@@ -42,5 +42,4 @@ jobs:
           --ephemeral=yes \
           --tpm=no \
           --force \
-          --console=read-only \
           vm
