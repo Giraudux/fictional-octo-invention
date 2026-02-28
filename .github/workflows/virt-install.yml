@@ -1,0 +1,41 @@
+name: virt-install
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mkosi:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - id: cache
+      uses: actions/cache@v5
+      with:
+        path: ubuntu-24.04.4-desktop-amd64.iso
+        key: ubuntu-24.04.4-desktop-amd64
+    - if: steps.cache.outputs.cache-hit != 'true'
+      run: wget --quiet https://releases.ubuntu.com/24.04.4/ubuntu-24.04.4-desktop-amd64.iso
+    - timeout-minutes: 10
+      continue-on-error: true
+      run: |
+        set -x
+        sudo apt -y update
+        sudo apt -y install libvirt-daemon-system virtinst qemu-system
+        cat > user-data << 'EOF'
+        #cloud-config
+        autoinstall:
+        version: 1
+        identity:
+            hostname: ubuntu-server
+            password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+            username: ubuntu
+        EOF
+        sudo virt-install \
+            --noreboot \
+            --disk size=1000 \
+            --osinfo ubuntunoble \
+            --cdrom ubuntu-24.04.4-desktop-amd64.iso \
+            --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
+            --location ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
+            --cloud-init user-data=user-data \
+            --graphics none
