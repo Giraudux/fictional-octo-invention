@@ -29,14 +29,14 @@ jobs:
             password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
             username: ubuntu
         EOF
-        mv ubuntu-24.04.4-desktop-amd64.iso "${{ runner.temp }}"
+        sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
             --disk size=1000 \
             --osinfo ubuntunoble \
-            --cdrom "${{ runner.temp }}/ubuntu-24.04.4-desktop-amd64.iso" \
+            --cdrom /var/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location "${{ runner.temp }}/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd" \
+            --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
             --graphics none
