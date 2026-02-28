@@ -39,5 +39,5 @@ jobs:
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
             --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
-            --console pty,target.type=virtio \
+            --autoconsole text \
             --graphics none
