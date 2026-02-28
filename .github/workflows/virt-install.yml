@@ -15,8 +15,7 @@ jobs:
         key: ubuntu-24.04.4-desktop-amd64
     - if: steps.cache.outputs.cache-hit != 'true'
       run: wget --quiet https://releases.ubuntu.com/24.04.4/ubuntu-24.04.4-desktop-amd64.iso
-    - timeout-minutes: 10
-      run: |
+    - run: |
         set -x
         sudo apt -y update
         sudo apt -y install libvirt-daemon-system virtinst qemu-system
@@ -30,6 +29,9 @@ jobs:
             username: ubuntu
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/
+    - timeout-minutes: 10
+      shell: 'script --return --quiet --command "bash {0}"'
+      run: |
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
@@ -39,5 +41,4 @@ jobs:
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
             --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
-            --autoconsole none \
             --graphics none
