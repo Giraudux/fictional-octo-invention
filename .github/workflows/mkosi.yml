@@ -55,15 +55,7 @@ jobs:
           --tpm=no \
           build
     - timeout-minutes: 10
-      shell: |
-        mkosi \
-          --distribution=ubuntu \
-          --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
-          --repositories=universe \
-          --autologin=yes \
-          --tpm=no \
-          vm
+      shell: bash -c "mkosi --distribution=ubuntu --release=noble --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic --repositories=universe --autologin=yes --tpm=no vm"
       run: |
         uname -a
         df -h
