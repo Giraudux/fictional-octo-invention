@@ -46,17 +46,39 @@ jobs:
     #       vm
     - timeout-minutes: 10
       run: |
+        mkosi genkey
         mkosi \
+          --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
-          --autologin=yes \
           --tpm=no \
+          --force \
+          --console=headless \
+          --ssh=always \
+          --vsock=no \
           build
-    - timeout-minutes: 10
-      shell: bash -c "mkosi --distribution=ubuntu --release=noble --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic --repositories=universe --autologin=yes --tpm=no vm"
-      run: |
-        uname -a
-        df -h
-
+        mkosi \
+          --machine=test0 \
+          --distribution=ubuntu \
+          --release=noble \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
+          --repositories=universe \
+          --tpm=no \
+          --console=headless \
+          --ssh=always \
+          --vsock=no \
+          vm &
+        sleep 30
+        mkosi \
+          --machine=test0 \
+          --distribution=ubuntu \
+          --release=noble \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
+          --repositories=universe \
+          --tpm=no \
+          --console=headless \
+          --ssh=always \
+          --vsock=no \
+          ssh
