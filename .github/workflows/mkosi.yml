@@ -57,8 +57,8 @@ jobs:
           --tpm=no \
           --force \
           --ssh=always \
-          --console=headless
-          --machine=test0
-        vm &
+          --console=headless \
+          --machine=test0 \
+          vm &
         sleep 30
         mkosi --machine=test0 ssh
