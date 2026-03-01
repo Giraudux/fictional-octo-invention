@@ -32,15 +32,33 @@ jobs:
         apt -y -o DPkg::Lock::Timeout=-1 update
         poweroff
         EOF
+    # - timeout-minutes: 10
+    #   run: |
+    #     mkosi \
+    #       --distribution=ubuntu \
+    #       --release=noble \
+    #       --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
+    #       --repositories=universe \
+    #       --autologin=yes \
+    #       --ephemeral=yes \
+    #       --tpm=no \
+    #       --force \
+    #       vm
     - timeout-minutes: 10
       run: |
+        mkosi genkey
         mkosi \
           --distribution=ubuntu \
           --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,ssh-server \
           --repositories=universe \
           --autologin=yes \
           --ephemeral=yes \
           --tpm=no \
           --force \
-          vm
+          --ssh=always \
+          --console=headless
+          --machine=test0
+        vm &
+        sleep 30
+        mkosi --machine=test0 ssh
