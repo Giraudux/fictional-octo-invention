@@ -59,6 +59,7 @@ jobs:
           --ssh=always \
           --console=headless \
           --machine=test0 \
+          --vsock=yes \
           build
         mkosi \
           --distribution=ubuntu \
