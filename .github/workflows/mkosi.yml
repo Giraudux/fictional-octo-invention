@@ -46,6 +46,7 @@ jobs:
     #       vm
     - timeout-minutes: 10
       run: |
+        set -x
         mkosi genkey
         mkosi \
           --distribution=ubuntu \
