@@ -56,7 +56,18 @@ jobs:
           --autologin=yes \
           --ephemeral=yes \
           --tpm=no \
-          --force \
+          --ssh=always \
+          --console=headless \
+          --machine=test0 \
+          build
+        mkosi \
+          --distribution=ubuntu \
+          --release=noble \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
+          --repositories=universe \
+          --autologin=yes \
+          --ephemeral=yes \
+          --tpm=no \
           --ssh=always \
           --console=headless \
           --machine=test0 \
