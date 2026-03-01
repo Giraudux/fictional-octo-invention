@@ -50,7 +50,7 @@ jobs:
         mkosi \
           --distribution=ubuntu \
           --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,ssh-server \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
           --autologin=yes \
           --ephemeral=yes \
