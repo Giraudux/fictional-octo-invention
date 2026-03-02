@@ -54,6 +54,9 @@ jobs:
           --tpm=no \
           --console=headless \
           vm &
-        while [ ! -e "/run/user/$UID/mkosi/machine" ] ; do sleep 1 ; done
         while ! mkosi ssh -- exit ; do sleep 1 ; done
-        mkosi ssh -- -q -n -o BatchMode=yes uname
+        mkosi ssh -- -q -n -o BatchMode=yes << EOF
+        set -xe
+        uname -a
+        df -h
+        EOF
