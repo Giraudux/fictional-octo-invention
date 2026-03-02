@@ -11,7 +11,7 @@ jobs:
       uses: systemd/mkosi@main
     - run: |
         sudo apt -y update
-        mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install        
+        mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install qemu-user-static
     - run: |
         set -x
         mkdir -p mkosi.repart/ mkosi.extra/etc/apt/sources.list.d/
