@@ -60,4 +60,4 @@ jobs:
           --console=headless \
           vm &
         while [ ! -e "/run/user/$UID/mkosi/machine" ] ; do sleep 1 ; done
-        mkosi ssh
+        mkosi ssh -- -o ConnectTimeout=30
