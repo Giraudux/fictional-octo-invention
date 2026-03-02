@@ -59,4 +59,5 @@ jobs:
         set -xe
         uname -a
         df -h
+        errrrrrrrrrrrrrror
         EOF
