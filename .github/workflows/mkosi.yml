@@ -29,6 +29,8 @@ jobs:
         Type=root
         Format=ext4
         CopyFiles=/
+        SizeMinBytes=8G
+        SizeMaxBytes=8G
         EOF
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
         Types: deb
@@ -53,7 +55,6 @@ jobs:
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
           --ssh=always \
-          --output-size=8G \
           build
         mkosi \
           --tpm=no \
