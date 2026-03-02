@@ -73,7 +73,7 @@ jobs:
           --register=yes \
           vm &
         sleep 30
-        mkosi \
+        sudo mkosi \
           --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
