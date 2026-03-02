@@ -55,7 +55,7 @@ jobs:
           --console=headless \
           vm &
         while ! mkosi ssh -- exit ; do sleep 1 ; done
-        mkosi ssh -- -q -n -o BatchMode=yes bash << EOF
+        mkosi ssh -- -n -o BatchMode=yes bash << EOF
         set -xe
         uname -a
         df -h
