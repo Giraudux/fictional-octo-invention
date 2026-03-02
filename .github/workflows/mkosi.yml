@@ -49,7 +49,6 @@ jobs:
         set -x
         mkosi genkey
         mkosi \
-          --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
@@ -59,7 +58,6 @@ jobs:
           --ssh=always \
           build
         mkosi \
-          --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
@@ -70,7 +68,6 @@ jobs:
           vm &
         sleep 30
         mkosi \
-          --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
