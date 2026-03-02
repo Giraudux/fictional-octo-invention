@@ -38,6 +38,7 @@ jobs:
         Packages=grub-efi,ubuntu-minimal,openssh-server,linux-image-generic
         WithRecommends=yes
         Bootable=yes
+        Bootloader=grub
         Ssh=always
 
         [Runtime]
