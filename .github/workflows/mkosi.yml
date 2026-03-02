@@ -27,11 +27,6 @@ jobs:
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         EOF
-        cat << EOF > mkosi.extra/root/.profile
-        set -x
-        apt -y -o DPkg::Lock::Timeout=-1 update
-        poweroff
-        EOF
     # - timeout-minutes: 10
     #   run: |
     #     mkosi \
@@ -60,4 +55,5 @@ jobs:
           --console=headless \
           vm &
         while [ ! -e "/run/user/$UID/mkosi/machine" ] ; do sleep 1 ; done
-        mkosi ssh -- -o ConnectTimeout=30 -o ConnectionAttempts=30
+        while ! mkosi ssh -- exit ; do sleep 1 ; done
+        mkosi ssh -- -q -n -o BatchMode=yes uname
