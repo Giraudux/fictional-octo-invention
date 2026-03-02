@@ -59,6 +59,7 @@ jobs:
           --console=headless \
           --ssh=always \
           --vsock=no \
+          --register=yes \
           build
         mkosi \
           --machine=test0 \
@@ -69,6 +70,7 @@ jobs:
           --tpm=no \
           --ssh=always \
           --vsock=no \
+          --register=yes \
           vm &
         sleep 30
         mkosi \
@@ -81,4 +83,5 @@ jobs:
           --console=headless \
           --ssh=always \
           --vsock=no \
+          --register=yes \
           ssh
