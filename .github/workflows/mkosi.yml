@@ -45,7 +45,7 @@ jobs:
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         EOF
-    - timeout-minutes: 10
+    - timeout-minutes: 20
       run: |
         set -x
         mkosi genkey
