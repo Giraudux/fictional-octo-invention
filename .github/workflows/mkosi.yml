@@ -55,11 +55,8 @@ jobs:
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
           --tpm=no \
-          --force \
           --console=headless \
           --ssh=always \
-          --vsock=no \
-          --register=yes \
           build
         mkosi \
           --machine=test0 \
@@ -69,11 +66,10 @@ jobs:
           --repositories=universe \
           --tpm=no \
           --ssh=always \
-          --vsock=no \
-          --register=yes \
+          --console=headless \
           vm &
         sleep 30
-        sudo mkosi \
+        mkosi \
           --machine=test0 \
           --distribution=ubuntu \
           --release=noble \
@@ -82,6 +78,4 @@ jobs:
           --tpm=no \
           --console=headless \
           --ssh=always \
-          --vsock=no \
-          --register=yes \
           ssh
