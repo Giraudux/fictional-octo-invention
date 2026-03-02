@@ -38,7 +38,7 @@ jobs:
         Suites: noble noble-updates noble-backports
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-        
+
         Types: deb
         URIs: http://security.ubuntu.com/ubuntu/
         Suites: noble-security
@@ -69,4 +69,6 @@ jobs:
         df -h
         lsblk
         tree /work/
+        touch /work/hello
         EOF
+        ls
