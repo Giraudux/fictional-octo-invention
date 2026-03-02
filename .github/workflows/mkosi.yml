@@ -52,13 +52,14 @@ jobs:
         mkosi \
           --distribution=ubuntu \
           --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
+          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server,tree \
           --repositories=universe \
           --ssh=always \
           build
         mkosi \
           --tpm=no \
           --console=headless \
+          --runtime-build-sources=yes \
           vm &
         while ! mkosi ssh -- exit ; do sleep 1 ; done
         mkosi ssh -- -o BatchMode=yes bash << EOF
@@ -67,4 +68,5 @@ jobs:
         uname -a
         df -h
         lsblk
+        tree /work/
         EOF
