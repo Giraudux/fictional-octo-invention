@@ -38,7 +38,7 @@ jobs:
         Suites: noble noble-updates noble-backports
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-        
+
         Types: deb
         URIs: http://security.ubuntu.com/ubuntu/
         Suites: noble-security
@@ -50,6 +50,7 @@ jobs:
         set -x
         mkosi genkey
         mkosi \
+          --architecture=arm64 \
           --distribution=ubuntu \
           --release=noble \
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server,tree \
