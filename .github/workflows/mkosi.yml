@@ -53,26 +53,11 @@ jobs:
           --release=noble \
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
-          --tpm=no \
-          --console=headless \
           --ssh=always \
           build
         mkosi \
-          --distribution=ubuntu \
-          --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
-          --repositories=universe \
           --tpm=no \
-          --ssh=always \
           --console=headless \
           vm &
         sleep 30
-        mkosi \
-          --distribution=ubuntu \
-          --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
-          --repositories=universe \
-          --tpm=no \
-          --console=headless \
-          --ssh=always \
-          ssh
+        mkosi ssh
