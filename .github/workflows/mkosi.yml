@@ -14,7 +14,22 @@ jobs:
         mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install        
     - run: |
         set -x
-        mkdir -p mkosi.extra/etc/apt/sources.list.d/ mkosi.extra/root/
+        mkdir -p mkosi.repart/ mkosi.extra/etc/apt/sources.list.d/
+        cat << EOF > mkosi.repart/00-esp.conf
+        [Partition]
+        Type=esp
+        Format=vfat
+        CopyFiles=/boot:/
+        CopyFiles=/efi:/
+        SizeMinBytes=512M
+        SizeMaxBytes=512M
+        EOF
+        cat << EOF > mkosi.repart/10-root.conf
+        [Partition]
+        Type=root
+        Format=ext4
+        CopyFiles=/
+        EOF
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
         Types: deb
         URIs: http://archive.ubuntu.com/ubuntu/
