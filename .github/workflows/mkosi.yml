@@ -37,6 +37,7 @@ jobs:
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
           --ssh=always \
+          --output-size=8G \
           build
         mkosi \
           --tpm=no \
