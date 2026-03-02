@@ -46,6 +46,7 @@ jobs:
     #       vm
     - timeout-minutes: 10
       run: |
+        set -x
         mkosi genkey
         mkosi \
           --machine=test0 \
@@ -66,7 +67,6 @@ jobs:
           --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server \
           --repositories=universe \
           --tpm=no \
-          --console=headless \
           --ssh=always \
           --vsock=no \
           vm &
