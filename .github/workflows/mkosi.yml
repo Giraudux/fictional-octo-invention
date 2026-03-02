@@ -27,18 +27,6 @@ jobs:
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         EOF
-    # - timeout-minutes: 10
-    #   run: |
-    #     mkosi \
-    #       --distribution=ubuntu \
-    #       --release=noble \
-    #       --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic \
-    #       --repositories=universe \
-    #       --autologin=yes \
-    #       --ephemeral=yes \
-    #       --tpm=no \
-    #       --force \
-    #       vm
     - timeout-minutes: 10
       run: |
         set -x
@@ -59,5 +47,4 @@ jobs:
         set -xe
         uname -a
         df -h
-        errrrrrrrrrrrrror
         EOF
