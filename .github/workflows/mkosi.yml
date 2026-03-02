@@ -59,4 +59,5 @@ jobs:
           --tpm=no \
           --console=headless \
           vm &
+        sleep 30
         mkosi ssh
