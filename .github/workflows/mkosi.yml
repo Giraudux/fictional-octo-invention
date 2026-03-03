@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install mkosi
-      uses: systemd/mkosi@main
+      uses: systemd/mkosi@6341f408e137e2b25e135f7522c71fddd96e3678
     - name: Install dependencies
       run: |
         sudo apt -y update
