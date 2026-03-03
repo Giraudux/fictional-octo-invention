@@ -43,7 +43,7 @@ jobs:
         [Runtime]
         TPM=no
         RuntimeBuildSources=yes
-        KernelCommandLineExtra=console=ttyS0 systemd.journald.forward_to_console=yes
+        KernelCommandLineExtra=systemd.journald.forward_to_console=yes
         EOF
 
         cat << EOF > mkosi.repart/00-esp.conf
@@ -106,9 +106,11 @@ jobs:
         mkosi ssh -- -o BatchMode=yes << EOF
         set -xe
         apt -y update
-        sleep 30
-        apt -y update
+        systemctl list-units --failed
         EOF
     - name: Journal
       if: always()
       run: journalctl -u mkosi-vm.service
+    - name: Journal
+      if: always()
+      run: mkosi ssh -- -o BatchMode=yes journalctl
