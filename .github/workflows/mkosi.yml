@@ -35,8 +35,8 @@ jobs:
         Format=disk
 
         [Content]
-        Packages=grub-efi,ubuntu-minimal,openssh-server,linux-image-generic
-        WithRecommends=yes
+        Packages=grub-efi,ubuntu-minimal,openssh-server,linux-image-generic,systemd-resolved
+        WithRecommends=no
         Bootable=yes
         Bootloader=grub
         Ssh=always
