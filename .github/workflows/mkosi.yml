@@ -106,7 +106,7 @@ jobs:
 
         mkosi ssh -- -o BatchMode=yes << EOF
         set -xe
-        sudo apt -y update
+        apt -y update
         EOF
     - name: Journal
       if: always()
