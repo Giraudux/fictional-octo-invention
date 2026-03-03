@@ -45,7 +45,7 @@ jobs:
         TPM=no
         RuntimeBuildSources=yes
         KernelCommandLineExtra=systemd.journald.forward_to_console=yes
-        Console=read-only
+        Console=native
         EOF
 
         cat << EOF > mkosi.repart/00-esp.conf
