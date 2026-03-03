@@ -28,7 +28,6 @@ jobs:
         [Distribution]
         Distribution=ubuntu
         Release=${{ inputs.release }}
-        Architecture=x86-64
         Repositories=universe
 
         [Output]
