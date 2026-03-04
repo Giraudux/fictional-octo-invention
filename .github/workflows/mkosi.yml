@@ -34,9 +34,10 @@ jobs:
         Format=disk
 
         [Content]
-        Packages=systemd-boot,ubuntu-minimal,openssh-server,linux-image-generic
+        Packages=ubuntu-minimal,openssh-server,linux-image-generic
         WithRecommends=yes
         Bootable=yes
+        Bootloader=uki
         Ssh=always
 
         [Runtime]
