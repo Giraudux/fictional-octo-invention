@@ -34,10 +34,10 @@ jobs:
         Format=disk
 
         [Content]
-        Packages=ubuntu-minimal,openssh-server,linux-image-generic
+        Packages=grub-efi,ubuntu-minimal,openssh-server,linux-image-generic
         WithRecommends=yes
         Bootable=yes
-        Bootloader=uki
+        Bootloader=grub-signed
         Ssh=always
 
         [Runtime]
