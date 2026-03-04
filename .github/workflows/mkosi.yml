@@ -2,19 +2,50 @@ name: mkosi
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        type: string
+        default: noble
+        required: true
 
 jobs:
   mkosi:
     runs-on: ubuntu-latest
     steps:
-    - name: setup-mkosi
-      uses: systemd/mkosi@main
-    - run: |
+    - name: Install mkosi
+      uses: systemd/mkosi@6341f408e137e2b25e135f7522c71fddd96e3678
+    - name: Install dependencies
+      run: |
         sudo apt -y update
         mkosi dependencies -- --profile runtime | xargs -d '\n' sudo apt -y install qemu-user-static
-    - run: |
+    - name: Start VM
+      run: |
         set -x
+
         mkdir -p mkosi.repart/ mkosi.extra/etc/apt/sources.list.d/
+
+        cat << EOF > mkosi.conf
+        [Distribution]
+        Distribution=ubuntu
+        Release=${{ inputs.release }}
+        Repositories=universe
+
+        [Output]
+        Format=disk
+
+        [Content]
+        Packages=grub-efi,ubuntu-minimal,openssh-server,linux-image-generic
+        WithRecommends=yes
+        Bootable=yes
+        Bootloader=grub
+        Ssh=always
+
+        [Runtime]
+        TPM=no
+        RuntimeBuildSources=yes
+        KernelCommandLineExtra=systemd.journald.forward_to_console=yes
+        EOF
+
         cat << EOF > mkosi.repart/00-esp.conf
         [Partition]
         Type=esp
@@ -24,6 +55,7 @@ jobs:
         SizeMinBytes=512M
         SizeMaxBytes=512M
         EOF
+
         cat << EOF > mkosi.repart/10-root.conf
         [Partition]
         Type=root
@@ -32,44 +64,54 @@ jobs:
         SizeMinBytes=8G
         SizeMaxBytes=8G
         EOF
+
         cat << EOF > mkosi.extra/etc/apt/sources.list.d/ubuntu.sources
         Types: deb
         URIs: http://archive.ubuntu.com/ubuntu/
-        Suites: noble noble-updates noble-backports
+        Suites: ${{ inputs.release }} ${{ inputs.release }}-updates ${{ inputs.release }}-backports
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
         Types: deb
         URIs: http://security.ubuntu.com/ubuntu/
-        Suites: noble-security
+        Suites: ${{ inputs.release }}-security
         Components: main restricted universe multiverse
         Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         EOF
-    - timeout-minutes: 20
-      run: |
-        set -x
-        mkosi genkey
-        mkosi \
-          --architecture=x86-64 \
-          --distribution=ubuntu \
-          --release=noble \
-          --package=systemd-boot,systemd-resolved,ubuntu-minimal,linux-image-generic,openssh-server,tree \
-          --repositories=universe \
-          --ssh=always \
-          build
-        mkosi \
-          --tpm=no \
-          --console=headless \
-          --runtime-build-sources=yes \
-          vm &
-        while ! mkosi ssh -- exit ; do sleep 1 ; done
-        mkosi ssh -- -o BatchMode=yes bash << EOF
-        set -xe
-        sudo apt -y update
-        uname -a
-        df -h
-        lsblk
-        tree /work/
-        touch /work/src/hello
+
+        sudo tee /usr/lib/systemd/system/mkosi-vm.service > /dev/null << EOF
+        [Unit]
+        Description=mkosi vm service
+
+        [Service]
+        User=$USER
+        ExecStart=mkosi --directory="${{ github.workspace }}" vm
         EOF
-        ls
+
+        mkosi genkey
+        mkosi build
+        sudo systemctl daemon-reload
+        sudo systemctl start mkosi-vm.service
+    - name: Wait
+      timeout-minutes: 1
+      run: |
+        until mkosi ssh -- -o BatchMode=yes exit
+        do
+          sleep 1
+        done
+    -  name: Exec
+       run: |
+        set -x
+
+        mkosi ssh -- -o BatchMode=yes << EOF
+        set -xe
+        apt -y update
+        ls /work/src/
+        systemctl list-units --failed
+        EOF
+    - name: Journal
+      if: always()
+      run: journalctl -u mkosi-vm.service
+    - name: Journal
+      if: always()
+      run: mkosi ssh -- -o BatchMode=yes journalctl
