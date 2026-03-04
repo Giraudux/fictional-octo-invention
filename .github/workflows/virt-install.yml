@@ -18,7 +18,7 @@ jobs:
     - run: |
         set -x
         sudo apt -y update
-        sudo apt -y install libvirt-daemon-system virtinst qemu-system
+        sudo apt -y install libvirt-daemon-system virtinst qemu-system partclone
         cat > user-data << 'EOF'
         #cloud-config
         autoinstall:
@@ -34,7 +34,7 @@ jobs:
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
-            --disk size=1000 \
+            --disk format=raw,size=1000 \
             --osinfo ubuntunoble \
             --cdrom /var/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
