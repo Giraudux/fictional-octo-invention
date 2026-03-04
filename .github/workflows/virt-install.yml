@@ -38,6 +38,6 @@ jobs:
             --osinfo ubuntunoble \
             --cdrom /var/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
+            --location /var/ubuntu-24.04.4-desktop-amd64.iso \
             --cloud-init user-data=user-data \
             --graphics none
