@@ -25,6 +25,8 @@ jobs:
           version: 1
           error-commands:
             - poweroff
+          late-commands:
+            - find / -name "*user-data*"
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/
     - timeout-minutes: 10
