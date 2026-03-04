@@ -23,7 +23,6 @@ jobs:
         #cloud-config
         autoinstall:
           version: 1
-          shutdown: poweroff
           error-commands:
             - poweroff
         EOF
@@ -34,10 +33,14 @@ jobs:
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
-            --disk format=raw,size=1000 \
+            --disk format=raw,size=16 \
             --osinfo ubuntunoble \
             --cdrom /var/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location /var/ubuntu-24.04.4-desktop-amd64.iso \
+            --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
             --graphics none
+    - run: |
+        set -x
+        ls /var/lib/libvirt/*
+        
