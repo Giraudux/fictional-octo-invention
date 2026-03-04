@@ -42,5 +42,5 @@ jobs:
             --graphics none
     - run: |
         set -x
-        ls /var/lib/libvirt/*
-        
+        sudo ls -l /var/lib/libvirt/*
+
