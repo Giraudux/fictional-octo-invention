@@ -55,7 +55,7 @@ jobs:
             --graphics none \
           | tee > install.log
         ! grep subiquity/Error/run install.log
-        grep ubiquity/Install/install/postinstall install.log
+        grep subiquity/Install/install/postinstall install.log
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
