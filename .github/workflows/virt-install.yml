@@ -23,12 +23,18 @@ jobs:
         #cloud-config
         autoinstall:
           version: 1
+          source:
+            id: ubuntu-desktop-minimal
+          identity:
+            password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+            username: ubuntu
           error-commands:
             - poweroff
           late-commands:
-            - find / -type f -name "*user*data*"
-            - df -h
-            - lsblk
+            - curtin in-target -- mkdir -p /usr/lib/repart.d/
+            - curtin in-target -- echo "[Partition]" > /usr/lib/repart.d/50-root.conf
+            - curtin in-target -- echo "Type=root"  >> /usr/lib/repart.d/50-root.conf
+            - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" 2> /dev/null
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
     - timeout-minutes: 10
@@ -37,11 +43,11 @@ jobs:
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
-            --disk format=raw,size=16 \
+            --disk format=raw,size=8 \
             --osinfo ubuntunoble \
-            --cdrom //var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso \
+            --cdrom /var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location //var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
+            --location /var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
             --boot uefi \
             --graphics none
