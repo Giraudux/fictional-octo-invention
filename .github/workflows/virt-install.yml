@@ -47,13 +47,17 @@ jobs:
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
-        sudo partclone.imager -c -s /var/lib/libvirt/images/ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
-        sudo zstdmt -o ubuntu24.04.img.zst /var/lib/libvirt/images/ubuntu24.04.img 
+        sudo mv /var/lib/libvirt/images/ubuntu24.04.img "${{ github.workspace }}"
+        sudo chown "$USER:$USER" ubuntu24.04.img
+        partclone.imager -c -s ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
+        zstdmt -o ubuntu24.04.img.zst ubuntu24.04.img 
     - uses: actions/upload-artifact@v4
       with:
         name: ubuntu24.04.000
         path: ubuntu24.04.000
+        compression-level: 0
     - uses: actions/upload-artifact@v4
       with:
         name: ubuntu24.04.img.zst
         path: ubuntu24.04.img.zst
+        compression-level: 0
