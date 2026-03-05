@@ -31,11 +31,14 @@ jobs:
             hostname: ubuntu
           error-commands:
             - poweroff
+          user-data:
+            write_files:
+            - path: /usr/lib/repart.d/50-root.conf
+              content: |
+                [Partition]
+                Type=root
           late-commands:
-            - curtin in-target -- mkdir -p /usr/lib/repart.d/
-            - curtin in-target -- echo "[Partition]" > /usr/lib/repart.d/50-root.conf
-            - curtin in-target -- echo "Type=root"  >> /usr/lib/repart.d/50-root.conf
-            - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" 2> /dev/null
+            - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" || true 2> /dev/null
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
       # Failure token: "subiquity/Error/run"
