@@ -45,7 +45,7 @@ jobs:
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
-            --disk format=raw,size=8 \
+            --disk format=raw,size=16 \
             --osinfo ubuntunoble \
             --cdrom /var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
