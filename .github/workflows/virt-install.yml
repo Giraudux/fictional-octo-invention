@@ -27,8 +27,9 @@ jobs:
             - poweroff
           late-commands:
             - find / -name "*user-data*"
+            - df -h
         EOF
-        sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/
+        sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
     - timeout-minutes: 10
       shell: script --return --quiet --command "bash {0}"
       run: |
@@ -37,12 +38,16 @@ jobs:
             --check disk_size=off \
             --disk format=raw,size=16 \
             --osinfo ubuntunoble \
-            --cdrom /var/ubuntu-24.04.4-desktop-amd64.iso \
+            --cdrom //var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso \
             --extra-args "autoinstall console=ttyS0 systemd.journald.forward_to_console=yes" \
-            --location /var/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
+            --location //var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
             --graphics none
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
-
+        partclone.imager -c -s /var/lib/libvirt/images/ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ubuntu24.04.000
+        path: ubuntu24.04.000
