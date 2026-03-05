@@ -41,7 +41,6 @@ jobs:
             - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" || true 2> /dev/null
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
-      # Failure token: "subiquity/Error/run"
     - timeout-minutes: 20
       shell: script --return --quiet --command "bash {0}"
       run: |
@@ -55,7 +54,9 @@ jobs:
             --location /var/lib/libvirt/boot/ubuntu-24.04.4-desktop-amd64.iso,kernel=/casper/vmlinuz,initrd=/casper/initrd \
             --cloud-init user-data=user-data \
             --boot uefi \
-            --graphics none
+            --graphics none \
+          | tee > install.log
+        ! grep subiquity/Error/run install.log
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
