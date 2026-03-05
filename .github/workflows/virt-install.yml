@@ -26,7 +26,7 @@ jobs:
           error-commands:
             - poweroff
           late-commands:
-            - find / -name "*user-data*"
+            - find / -type f -name "*user*data*"
             - df -h
             - lsblk
         EOF
@@ -49,8 +49,7 @@ jobs:
         sudo ls -l /var/lib/libvirt/*
         sudo mv /var/lib/libvirt/images/ubuntu24.04.img "${{ github.workspace }}"
         sudo chown "$USER:$USER" ubuntu24.04.img
-        partclone.imager -c -s ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
-        zstdmt -o ubuntu24.04.img.zst ubuntu24.04.img 
+        sudo partclone.imager -c -s ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
     - uses: actions/upload-artifact@v4
       with:
         name: ubuntu24.04.000
@@ -58,6 +57,5 @@ jobs:
         compression-level: 0
     - uses: actions/upload-artifact@v4
       with:
-        name: ubuntu24.04.img.zst
-        path: ubuntu24.04.img.zst
-        compression-level: 0
+        name: ubuntu24.04.img
+        path: ubuntu24.04.img
