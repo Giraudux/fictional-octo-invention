@@ -15,7 +15,8 @@ jobs:
         key: ubuntu-24.04.4-desktop-amd64
     - if: steps.cache.outputs.cache-hit != 'true'
       run: wget --quiet https://releases.ubuntu.com/24.04.4/ubuntu-24.04.4-desktop-amd64.iso
-    - run: |
+    - name: user-data
+      run: |
         set -x
         sudo apt -y update
         sudo apt -y install libvirt-daemon-system virtinst qemu-system partclone
@@ -39,9 +40,11 @@ jobs:
                 Type=root
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
-    - timeout-minutes: 20
+    - name: Install
+      timeout-minutes: 20
       shell: script --return --quiet --command "bash {0}"
-      run: |
+      run: |  
+        set -x
         sudo virt-install \
             --noreboot \
             --check disk_size=off \
@@ -54,9 +57,10 @@ jobs:
             --boot uefi \
             --graphics none \
           | tee > install.log
-        ! grep subiquity/Error/run install.log
-        grep subiquity/Install/install/postinstall install.log
-    - run: |
+        ! grep subiquity/Error/run install.log > /dev/null 2>&1
+        grep subiquity/Install/install/postinstall install.log > /dev/null 2>&1
+    - name: Creates images
+      run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
         sudo mv /var/lib/libvirt/images/ubuntu24.04.img "${{ github.workspace }}"
