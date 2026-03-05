@@ -28,6 +28,7 @@ jobs:
           late-commands:
             - find / -name "*user-data*"
             - df -h
+            - lsblk
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
     - timeout-minutes: 10
@@ -46,8 +47,13 @@ jobs:
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
-        partclone.imager -c -s /var/lib/libvirt/images/ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
+        sudo partclone.imager -c -s /var/lib/libvirt/images/ubuntu24.04.img -a0 | zstdmt --rsyncable -o ubuntu24.04.000
+        zstdmt -o ubuntu24.04.img.zst /var/lib/libvirt/images/ubuntu24.04.img 
     - uses: actions/upload-artifact@v4
       with:
         name: ubuntu24.04.000
         path: ubuntu24.04.000
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ubuntu24.04.img.zst
+        path: ubuntu24.04.img.zst
