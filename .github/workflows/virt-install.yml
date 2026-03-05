@@ -39,7 +39,7 @@ jobs:
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
       # Failure token: "subiquity/Error/run"
-    - timeout-minutes: 10
+    - timeout-minutes: 20
       shell: script --return --quiet --command "bash {0}"
       run: |
         sudo virt-install \
