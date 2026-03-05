@@ -37,8 +37,6 @@ jobs:
               content: |
                 [Partition]
                 Type=root
-          late-commands:
-            - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" || true 2> /dev/null
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
     - timeout-minutes: 20
@@ -57,6 +55,7 @@ jobs:
             --graphics none \
           | tee > install.log
         ! grep subiquity/Error/run install.log
+        grep ubiquity/Install/install/postinstall install.log
     - run: |
         set -x
         sudo ls -l /var/lib/libvirt/*
