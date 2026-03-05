@@ -28,6 +28,7 @@ jobs:
           identity:
             password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
             username: ubuntu
+            hostname: ubuntu
           error-commands:
             - poweroff
           late-commands:
@@ -37,6 +38,7 @@ jobs:
             - grep --exclude-dir={/proc/,/run/,/dev/} -r / -e "dc216ac4a4c232815731979db6e494f315b507dd" 2> /dev/null
         EOF
         sudo mv ubuntu-24.04.4-desktop-amd64.iso /var/lib/libvirt/boot/
+      # Failure token: "subiquity/Error/run"
     - timeout-minutes: 10
       shell: script --return --quiet --command "bash {0}"
       run: |
