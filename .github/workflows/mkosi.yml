@@ -34,7 +34,7 @@ jobs:
         Format=disk
 
         [Content]
-        Packages=ubuntu-minimal,openssh-server,linux-image-generic
+        Packages=ubuntu-minimal,ssh-server,linux-image-generic
         WithRecommends=yes
         Bootable=yes
         Ssh=always
@@ -108,9 +108,9 @@ jobs:
         ls /work/src/
         systemctl list-units --failed
         EOF
-    - name: Journal
+    - name: Journal service
       if: always()
       run: journalctl -u mkosi-vm.service
-    - name: Journal
+    - name: Journal VM
       if: always()
-      run: mkosi ssh -- -o BatchMode=yes journalctl
+      run: mkosi journalctl
